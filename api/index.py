@@ -84,27 +84,25 @@ class handler(BaseHTTPRequestHandler):
                 draw = ImageDraw.Draw(frame)
                 
                 # --- PAINEL 1: STATUS ---
-                draw.text((45, 45), "SURVIVAL STATUS", fill=title_color, font=font_title)
+               draw.text((45, 45), "SURVIVAL STATUS", fill=title_color, font=font_title)
                 draw.line([(45, 65), (275, 65)], fill=border_color, width=1)
                 
-                # O Condition clássico do Resident Evil
-                draw.text((45, 80), f"CONDITION:", fill=text_color, font=font_text)
-                draw.text((140, 80), f"{condition_text}", fill=condition_color, font=font_text)
+                # Nome do Player
+                draw.text((45, 80), "PLAYER:", fill=text_color, font=font_text)
+                draw.text((120, 80), "JOÃO VICTOR", fill=(200, 200, 200), font=font_text)
+
+                # Condition clássico do Resident Evil
+                draw.text((45, 105), "CONDITION:", fill=text_color, font=font_text)
+                draw.text((140, 105), f"{condition_text}", fill=condition_color, font=font_text)
                 
-                draw.text((45, 115), f"LEVEL:", fill=text_color, font=font_text)
-                draw.text((140, 115), f"{repos + followers}", fill=text_color, font=font_text)
+                draw.text((45, 130), "LEVEL:", fill=text_color, font=font_text)
+                draw.text((140, 130), f"{repos + followers}", fill=text_color, font=font_text)
                 
-                draw.text((45, 145), f"REPOSITORIES:", fill=text_color, font=font_text)
-                draw.text((155, 145), f"{repos}", fill=text_color, font=font_text)
+                draw.text((45, 155), "REPOSITORIES:", fill=text_color, font=font_text)
+                draw.text((160, 155), f"{repos}", fill=text_color, font=font_text)
                 
-                draw.text((45, 175), f"FOLLOWERS:", fill=text_color, font=font_text)
-                draw.text((155, 175), f"{followers}", fill=text_color, font=font_text)
-                
-                # --- PAINEL 2: QUEST/LOG ---
-                draw.text((45, 265), "CURRENT DIRECTIVE", fill=title_color, font=font_title)
-                draw.line([(45, 285), (275, 285)], fill=border_color, width=1)
-                draw.text((45, 305), "> LATEST LOG ENTRY:", fill=title_color, font=font_text)
-                draw.text((45, 335), last_commit, fill=text_color, font=font_text)
+                draw.text((45, 180), "FOLLOWERS:", fill=text_color, font=font_text)
+                draw.text((160, 180), f"{followers}", fill=text_color, font=font_text)
                 
                 if i % 2 == 0:
                     # Ajuste do cursor baseado na fonte
