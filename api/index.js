@@ -53,41 +53,38 @@ export default async function handler(req, res) {
         <defs>
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&amp;family=Courier+Prime&amp;display=swap');
-            
+  
             .title { font-family: 'Cinzel', Palatino, serif; font-size: 14px; font-weight: bold; fill: #b89c72; letter-spacing: 2px; }
             .value { font-family: 'Cinzel', Palatino, serif; font-size: 14px; fill: #e0e0e0; }
             .pesetas-text { font-family: 'Cinzel', Palatino, serif; font-size: 28px; fill: #d4af37; text-shadow: 2px 2px 4px #000; }
             .quest-text { font-family: 'Courier Prime', monospace; font-size: 11px; fill: #e0e0e0; }
-            
-            /* Painéis mais escuros para garantir leitura sobre a imagem clara */
-            .panel { fill: rgba(10, 10, 15, 0.85); stroke: #3a2e21; stroke-width: 1.5; }
+  
+             .panel { fill: rgba(10, 10, 15, 0.85); stroke: #3a2e21; stroke-width: 1.5; }
             .divider { stroke: #3a2e21; stroke-width: 1; stroke-dasharray: 4 2; }
-            
-            /* Animação de entrada da UI */
-            @keyframes slideIn {
-              0% { opacity: 0; transform: translateY(15px); }
-              100% { opacity: 1; transform: translateY(0); }
-            }
+  
+         /* Entrada da UI */
+            @keyframes slideIn { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
             .anim-panel { animation: slideIn 1s ease-out forwards; opacity: 0; }
-            .delay-1 { animation-delay: 0.2s; }
-            .delay-2 { animation-delay: 0.4s; }
-            .delay-3 { animation-delay: 0.6s; }
-            
-            /* Animações Atmosféricas sobre a imagem */
-            @keyframes fogMove {
-              0% { transform: translateX(-100px); opacity: 0.2; }
-              50% { opacity: 0.4; }
-              100% { transform: translateX(100px); opacity: 0.2; }
+            .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; } .delay-3 { animation-delay: 0.6s; }
+  
+  /* Chuva */
+          @keyframes rainFall { 
+          0% { transform: translateY(-50px) translateX(10px); opacity: 0; } 
+          50% { opacity: 0.6; } 
+          100% { transform: translateY(500px) translateX(-20px); opacity: 0; } 
             }
-            .fog { fill: #88929e; filter: blur(30px); animation: fogMove 12s alternate infinite ease-in-out; }
-            
-            @keyframes flicker {
-              0%, 100% { opacity: 0.1; }
-              5%, 95% { opacity: 0.2; }
-              10%, 90% { opacity: 0.15; }
-              50% { opacity: 0.4; }
-            }
-            .ambient-light { fill: #34495e; animation: flicker 6s infinite; mix-blend-mode: overlay; }
+          .drop { stroke: #a3c2c2; stroke-width: 1; stroke-dasharray: 10, 15; opacity: 0; }
+  
+           /* Fumo / Nevoeiro */
+          @keyframes fogMove { 0% { transform: translateX(-150px); opacity: 0.15; } 100% { transform: translateX(200px); opacity: 0.15; } }
+          .fog { fill: #88929e; filter: blur(40px); animation: fogMove 15s alternate infinite ease-in-out; }
+  
+          /* Sirenes da Polícia (Intercalando Vermelho e Azul) */
+          @keyframes sirens {
+          0%, 100% { fill: rgba(255, 0, 0, 0.1); }
+          50% { fill: rgba(0, 50, 255, 0.15); }
+          }
+            .siren-light { animation: sirens 3s infinite; mix-blend-mode: overlay; }
           </style>
         </defs>
 
@@ -100,9 +97,25 @@ export default async function handler(req, res) {
            preserveAspectRatio="xMidYMid slice" />
 
         <!-- 2. EFEITOS ATMOSFÉRICOS (Fumaça e Luz ambiente) -->
-        <rect width="850" height="480" class="ambient-light" />
-        <ellipse cx="200" cy="350" rx="400" ry="150" class="fog" />
-        <ellipse cx="650" cy="200" rx="350" ry="120" class="fog" style="animation-delay: -6s;" />
+        <rect width="850" height="480" class="siren-light" />
+
+<!-- Névoa densa -->
+<ellipse cx="200" cy="350" rx="400" ry="150" class="fog" />
+<ellipse cx="650" cy="250" rx="450" ry="150" class="fog" style="animation-delay: -7s;" />
+
+<!-- Chuva -->
+<g class="rain-layer">
+  <!-- Múltiplas gotas com diferentes delays e posições -->
+  <line x1="50" y1="-20" x2="45" y2="40" class="drop" style="animation: rainFall 0.8s linear infinite 0.1s;" />
+  <line x1="150" y1="-20" x2="145" y2="50" class="drop" style="animation: rainFall 0.7s linear infinite 0.5s;" />
+  <line x1="250" y1="-20" x2="240" y2="60" class="drop" style="animation: rainFall 0.9s linear infinite 0.2s;" />
+  <line x1="350" y1="-20" x2="345" y2="30" class="drop" style="animation: rainFall 0.6s linear infinite 0.8s;" />
+  <line x1="450" y1="-20" x2="440" y2="70" class="drop" style="animation: rainFall 0.85s linear infinite 0.3s;" />
+  <line x1="550" y1="-20" x2="545" y2="40" class="drop" style="animation: rainFall 0.75s linear infinite 0.6s;" />
+  <line x1="650" y1="-20" x2="640" y2="80" class="drop" style="animation: rainFall 0.95s linear infinite 0.4s;" />
+  <line x1="750" y1="-20" x2="745" y2="35" class="drop" style="animation: rainFall 0.65s linear infinite 0.9s;" />
+  <line x1="820" y1="-20" x2="810" y2="55" class="drop" style="animation: rainFall 0.8s linear infinite 0.7s;" />
+</g>
 
         <!-- 3. INTERFACE DE USUÁRIO (Enquadrando o centro) -->
         
