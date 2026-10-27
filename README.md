@@ -1,10 +1,10 @@
 <div align="center">
-  <!-- Adicionado o ?v=2 no final do link -->
-  <img src="https://save-room-readme.vercel.app/api?v=2" alt="Final Fantasy Status Menu" />
+  <!-- Mudamos de ?v=2 para ?theme=re4 para quebrar o cache do GitHub -->
+  <img src="https://save-room-readme.vercel.app/api?theme=re4" alt="Resident Evil 4 Status Menu" />
 </div>
 
 <br/>
 
 <div align="center">
-  <em>"A hero's journey is written in the logs they leave behind."</em>
+  <em>"What're ya buyin', stranger?"</em>
 </div>
