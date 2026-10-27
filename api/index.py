@@ -7,7 +7,7 @@ import os
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         username = 'SnuflyNoctis'
-        headers = {'User-Agent': 'SaveRoom-Clean-UI'}
+        headers = {'User-Agent': 'SaveRoom-Final-UI'}
         
         # 1. Buscar dados no GitHub
         try:
@@ -17,18 +17,29 @@ class handler(BaseHTTPRequestHandler):
             pesetas = (repos * 1500) + (followers * 5000) + 42500
             
             events = requests.get(f'https://api.github.com/users/{username}/events/public', headers=headers, timeout=5).json()
-            last_commit = "Aguardando logs..."
+            last_commit = "NO RECENT LOGS FOUND."
             if isinstance(events, list):
                 for e in events:
                     if e.get('type') == 'PushEvent':
                         commits = e['payload'].get('commits', [])
                         if commits:
                             last_commit = commits[0]['message'].split('\n')[0]
+                            # Limitar tamanho para não quebrar o painel
                             if len(last_commit) > 28: last_commit = last_commit[:25] + "..."
                             break
         except:
             repos, followers, pesetas = 14, 3, 88500
-            last_commit = "Sistema offline"
+            last_commit = "COMMS LINK SEVERED."
+
+        # Sistema de Condição (Classic RE)
+        condition_text = "FINE"
+        condition_color = (50, 205, 50) # Verde clássico
+        if repos < 10:
+            condition_text = "CAUTION"
+            condition_color = (255, 215, 0) # Amarelo
+        if repos < 5:
+            condition_text = "DANGER"
+            condition_color = (220, 20, 60) # Vermelho
 
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         assets_dir = os.path.join(base_dir, 'assets')
@@ -38,72 +49,98 @@ class handler(BaseHTTPRequestHandler):
             bg_base = Image.open(os.path.join(assets_dir, 'bg.png')).convert("RGBA")
             bg_base = bg_base.resize((850, 480), Image.Resampling.LANCZOS)
             
-            # 3. Criar a camada de painéis translúcidos
+            # 3. Carregar Fonte Customizada (Se não existir, usa a básica)
+            try:
+                # Tenta carregar a fonte que colocaste na pasta assets
+                font_title = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 16)
+                font_text = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 14)
+                font_pesetas = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 22)
+            except:
+                font_title = font_text = font_pesetas = ImageFont.load_default()
+            
+            # 4. Criar a camada de painéis translúcidos
             ui_overlay = Image.new('RGBA', bg_base.size, (0, 0, 0, 0))
             draw_ui = ImageDraw.Draw(ui_overlay)
             
-            panel_color = (15, 15, 18, 220)  # Fundo escuro (quase opaco para leitura)
-            border_color = (100, 80, 60, 255) # Borda rústica
+            panel_color = (15, 15, 18, 225)  
+            border_color = (139, 0, 0, 180) # Borda mudada para um Vermelho Escuro (Blood Red) elegante
             
-            # Desenhar os 4 Painéis (Esquerda e Direita)
-            draw_ui.rectangle([30, 30, 290, 210], fill=panel_color, outline=border_color, width=2)   # Status
-            draw_ui.rectangle([30, 250, 290, 430], fill=panel_color, outline=border_color, width=2)  # Quest/Logs
-            draw_ui.rectangle([560, 30, 820, 210], fill=panel_color, outline=border_color, width=2)  # Inventário
-            draw_ui.rectangle([560, 250, 820, 430], fill=panel_color, outline=border_color, width=2) # Pesetas
+            draw_ui.rectangle([30, 30, 290, 210], fill=panel_color, outline=border_color, width=1)
+            draw_ui.rectangle([30, 250, 290, 430], fill=panel_color, outline=border_color, width=1)
+            draw_ui.rectangle([560, 30, 820, 210], fill=panel_color, outline=border_color, width=1)
+            draw_ui.rectangle([560, 250, 820, 430], fill=panel_color, outline=border_color, width=1)
             
-            # Fundir os painéis vazios com o fundo
             bg_with_ui = Image.alpha_composite(bg_base, ui_overlay)
             
-            # 4. Gerar as Frames da Animação (GIF)
+            # 5. Gerar as Frames da Animação (GIF)
             frames = []
-            font = ImageFont.load_default()
             
-            text_color = (210, 210, 210)
-            title_color = (184, 156, 114)
+            text_color = (220, 220, 220)
+            title_color = (184, 156, 114) # Dourado envelhecido
+            accent_color = (200, 50, 50)  # Vermelho para os bullets
             
             for i in range(4):
                 frame = bg_with_ui.copy()
                 draw = ImageDraw.Draw(frame)
                 
-                # --- PAINEL 1: STATUS (Esquerda Cima) ---
-                draw.text((45, 45), "STATUS", fill=title_color, font=font)
-                draw.line([(45, 60), (275, 60)], fill=border_color, width=1)
-                draw.text((45, 75), f"LEVEL: {repos + followers}", fill=(100, 255, 100), font=font)
-                draw.text((45, 105), f"REPOSITORIES: {repos}", fill=text_color, font=font)
-                draw.text((45, 135), f"FOLLOWERS: {followers}", fill=text_color, font=font)
+                # --- PAINEL 1: STATUS ---
+                draw.text((45, 45), "SURVIVAL STATUS", fill=title_color, font=font_title)
+                draw.line([(45, 65), (275, 65)], fill=border_color, width=1)
                 
-                # --- PAINEL 2: QUEST/LOG (Esquerda Baixo) ---
-                draw.text((45, 265), "CURRENT QUEST", fill=title_color, font=font)
-                draw.line([(45, 280), (275, 280)], fill=border_color, width=1)
-                draw.text((45, 300), "> LATEST CODE LOG:", fill=text_color, font=font)
-                draw.text((45, 330), last_commit, fill=(230, 230, 230), font=font)
+                # O Condition clássico do Resident Evil
+                draw.text((45, 80), f"CONDITION:", fill=text_color, font=font_text)
+                draw.text((140, 80), f"{condition_text}", fill=condition_color, font=font_text)
                 
-                # Animação do Cursor
+                draw.text((45, 115), f"LEVEL:", fill=text_color, font=font_text)
+                draw.text((140, 115), f"{repos + followers}", fill=text_color, font=font_text)
+                
+                draw.text((45, 145), f"REPOSITORIES:", fill=text_color, font=font_text)
+                draw.text((155, 145), f"{repos}", fill=text_color, font=font_text)
+                
+                draw.text((45, 175), f"FOLLOWERS:", fill=text_color, font=font_text)
+                draw.text((155, 175), f"{followers}", fill=text_color, font=font_text)
+                
+                # --- PAINEL 2: QUEST/LOG ---
+                draw.text((45, 265), "CURRENT DIRECTIVE", fill=title_color, font=font_title)
+                draw.line([(45, 285), (275, 285)], fill=border_color, width=1)
+                draw.text((45, 305), "> LATEST LOG ENTRY:", fill=title_color, font=font_text)
+                draw.text((45, 335), last_commit, fill=text_color, font=font_text)
+                
                 if i % 2 == 0:
-                    cursor_pos = 45 + (len(last_commit) * 6.5)
-                    draw.rectangle([cursor_pos, 330, cursor_pos + 6, 342], fill=(200, 0, 0))
+                    # Ajuste do cursor baseado na fonte
+                    cursor_pos = 45 + draw.textlength(last_commit, font=font_text) + 2
+                    draw.rectangle([cursor_pos, 337, cursor_pos + 6, 350], fill=(200, 0, 0))
                 
-                # --- PAINEL 3: ATTACHED CASE (Direita Cima) ---
-                draw.text((575, 45), "ATTACHED CASE", fill=title_color, font=font)
-                draw.line([(575, 60), (805, 60)], fill=border_color, width=1)
-                draw.text((575, 80), "⬡ REACT.JS", fill=text_color, font=font)
-                draw.text((700, 80), "⬡ BUN", fill=text_color, font=font)
-                draw.text((575, 115), "⬡ TYPESCRIPT", fill=text_color, font=font)
-                draw.text((700, 115), "⬡ VITE", fill=text_color, font=font)
-                draw.text((575, 150), "⬡ TAILWIND", fill=text_color, font=font)
-                draw.text((700, 150), "⬡ THREE.JS", fill=text_color, font=font)
+                # --- PAINEL 3: ATTACHED CASE ---
+                draw.text((575, 45), "ATTACHED CASE", fill=title_color, font=font_title)
+                draw.line([(575, 65), (805, 65)], fill=border_color, width=1)
                 
-                # --- PAINEL 4: FUNDS (Direita Baixo) ---
-                draw.text((575, 265), "FUNDS", fill=title_color, font=font)
-                draw.line([(575, 280), (805, 280)], fill=border_color, width=1)
-                draw.text((620, 320), f"₧ {pesetas:,}".replace(",", "."), fill=(212, 175, 55), font=font)
-                draw.text((620, 360), '"What\'re ya buyin\'?"', fill=(130, 130, 130), font=font)
+                # Usando um caractere temático de bullet (♦ ou ►)
+                draw.text((575, 85), "► REACT.JS", fill=text_color, font=font_text)
+                draw.text((700, 85), "► BUN", fill=text_color, font=font_text)
+                draw.text((575, 120), "► TYPESCRIPT", fill=text_color, font=font_text)
+                draw.text((700, 120), "► VITE", fill=text_color, font=font_text)
+                draw.text((575, 155), "► TAILWIND", fill=text_color, font=font_text)
+                draw.text((700, 155), "► THREE.JS", fill=text_color, font=font_text)
+                
+                # --- PAINEL 4: FUNDS ---
+                draw.text((575, 265), "FUNDS", fill=title_color, font=font_title)
+                draw.line([(575, 285), (805, 285)], fill=border_color, width=1)
+                
+                # Centralizar as pesetas
+                ptas_text = f"₧ {pesetas:,}".replace(",", ".")
+                ptas_width = draw.textlength(ptas_text, font=font_pesetas)
+                draw.text((690 - (ptas_width/2), 325), ptas_text, fill=(212, 175, 55), font=font_pesetas)
+                
+                quote = '"What\'re ya buyin\'?"'
+                quote_width = draw.textlength(quote, font=font_text)
+                draw.text((690 - (quote_width/2), 370), quote, fill=(140, 140, 140), font=font_text)
                 
                 frames.append(frame.convert("RGB"))
             
-            # 5. Salvar e Enviar
+            # 6. Salvar e Enviar
             img_io = io.BytesIO()
-            frames[0].save(img_io, format='GIF', save_all=True, append_images=frames[1:], duration=500, loop=0, optimize=True)
+            frames[0].save(img_io, format='GIF', save_all=True, append_images=frames[1:], duration=600, loop=0, optimize=True)
             img_io.seek(0)
             
             self.send_response(200)
