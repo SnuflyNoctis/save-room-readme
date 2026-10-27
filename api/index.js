@@ -94,7 +94,7 @@ export default async function handler(req, res) {
         y="0"
          width="850"
           height="480"
-           preserveAspectRatio="xMidYMid meet" />
+           preserveAspectRatio="none" />
 
         <!-- 2. EFEITOS ATMOSFÉRICOS (Fumaça e Luz ambiente) -->
         <rect width="850" height="480" class="siren-light" />
