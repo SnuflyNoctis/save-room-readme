@@ -1,3 +1,6 @@
+
+<img src="https://readme-typing-svg.demolab.com?font=Courier+Prime&weight=600&size=30&pause=1000&color=D4AF37&center=true&vCenter=true&width=850&lines=Jo%C3%A3o+Victor;Front-End+Developer;Welcome+to+the+Safe+Room..." alt="Typing SVG" />
+
 <div align="center">
   <!-- The parameter ?theme=vca_safe_room forces GitHub to load your new image with your name -->
   <img width="850" src="https://save-room-readme.vercel.app/api?theme=vca_safe" alt="Save Room Profile Animated" />
@@ -10,7 +13,6 @@
 </div>
 
 ---
-
 ### LOG // ABOUT ME
 
 Welcome to my *Safe Room*. I'm **João Victor**, a Front-End Developer focused on crafting immersive and clean web interfaces. Currently, I develop corporate applications at **Futuro Construções** and I'm an undergraduate student in **Computer Science** at Faculdade Anhanguera. 
