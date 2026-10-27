@@ -1,10 +1,9 @@
 <div align="center">
-  <!-- Mudamos de ?v=2 para ?theme=re4 para quebrar o cache do GitHub -->
-  <img src="https://save-room-readme.vercel.app/api?theme=leon_rpd" alt="Resident Evil 4 Status Menu" />
+  <img src="https://save-room-readme.vercel.app/api?theme=save_room_py" alt="Save Room Profile" />
 </div>
 
 <br/>
 
 <div align="center">
-  <em>"What're ya buyin', stranger?"</em>
+  <em>"Got some rare repositories, stranger!"</em>
 </div>
