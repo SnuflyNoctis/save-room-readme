@@ -84,7 +84,7 @@ class handler(BaseHTTPRequestHandler):
                 draw = ImageDraw.Draw(frame)
                 
                 # --- PAINEL 1: STATUS ---
-               draw.text((45, 45), "SURVIVAL STATUS", fill=title_color, font=font_title)
+                draw.text((45, 45), "SURVIVAL STATUS", fill=title_color, font=font_title)
                 draw.line([(45, 65), (275, 65)], fill=border_color, width=1)
                 
                 # Nome do Player
