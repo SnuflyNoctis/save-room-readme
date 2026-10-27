@@ -1,5 +1,6 @@
 <div align="center">
-  <img src="https://save-room-readme.vercel.app/api" alt="Final Fantasy Status Menu" />
+  <!-- Adicionado o ?v=2 no final do link -->
+  <img src="https://save-room-readme.vercel.app/api?v=2" alt="Final Fantasy Status Menu" />
 </div>
 
 <br/>
