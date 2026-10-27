@@ -11,19 +11,19 @@
 
 ---
 
-### 🧬 ARCHIVE: INFECTION LOG (About Me)
+###  ARCHIVE: INFECTION LOG (About Me)
 
 Sou um Front-End Developer focado em arquitetura de interfaces, interações fluidas e experiências 3D. Sobrevivo aos desafios diários do código escrevendo **Clean Code** e estruturando projetos com **Domain-Driven Design (DDD)**. 
 
 Atualmente atuo no desenvolvimento de aplicações corporativas na Futuro Construções e a minha especialidade é criar desde dashboards complexos a animações web imersivas, garantindo sempre que o sistema não se transforma num *zombie*.
 
- 🩸&nbsp; Base de Operações: **Vitória da Conquista (VCA)**  
- 🩸&nbsp; Investigação Atual: **Engenharia Front-End (Three.js & Framer Motion)**  
- 🩸&nbsp; Estado Mental: **Sempre com café no inventário antes de lidar com estados do React.**
+ &nbsp; Base de Operações: **Vitória da Conquista (VCA)**  
+ &nbsp; Investigação Atual: **Engenharia Front-End (Three.js & Framer Motion)**  
+ &nbsp; Estado Mental: **Sempre com café no inventário antes de lidar com estados do React.**
 
 ---
 
-### 🎒 INVENTORY (Tech Stack)
+###  INVENTORY (Tech Stack)
 
 **[ PRIMARY WEAPONS ]**  
 <p align="left">
@@ -45,7 +45,7 @@ Atualmente atuo no desenvolvimento de aplicações corporativas na Futuro Constr
 
 ---
 
-### 📡 COMMS TERMINAL (Connect)
+###  COMMS TERMINAL (Connect)
 
 <p align="left">
   <a href="https://joao-dev-portfolio.web.app"><img src="https://img.shields.io/badge/Portfolio-8B0000?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Portfolio" /></a>
