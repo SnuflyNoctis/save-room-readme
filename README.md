@@ -1,6 +1,6 @@
 <div align="center">
   <!-- The parameter ?theme=vca_safe_room forces GitHub to load your new image with your name -->
-  <img width="850" src="https://save-room-readme.vercel.app/api?theme=vca_safe_room" alt="Save Room Profile Animated" />
+  <img width="850" src="https://save-room-readme.vercel.app/api?theme=vca_safe" alt="Save Room Profile Animated" />
 </div>
 
 <br/>
