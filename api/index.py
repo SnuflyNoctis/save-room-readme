@@ -104,6 +104,12 @@ class handler(BaseHTTPRequestHandler):
                 draw.text((45, 180), "FOLLOWERS:", fill=text_color, font=font_text)
                 draw.text((160, 180), f"{followers}", fill=text_color, font=font_text)
                 
+                # --- PAINEL 2: QUEST/LOG --- (CORRIGIDO: Estava a faltar no teu código!)
+                draw.text((45, 265), "CURRENT DIRECTIVE", fill=title_color, font=font_title)
+                draw.line([(45, 285), (275, 285)], fill=border_color, width=1)
+                draw.text((45, 305), "> LATEST LOG ENTRY:", fill=title_color, font=font_text)
+                draw.text((45, 335), last_commit, fill=text_color, font=font_text)
+                
                 if i % 2 == 0:
                     # Ajuste do cursor baseado na fonte
                     cursor_pos = 45 + draw.textlength(last_commit, font=font_text) + 2
