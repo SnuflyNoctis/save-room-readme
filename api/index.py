@@ -49,11 +49,17 @@ class handler(BaseHTTPRequestHandler):
             
             # 3. Carregar Fontes
             try:
-                font_title = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 16)
-                font_text = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 14)
-                font_small = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 11)
+                font_url = "https://raw.githubusercontent.com/googlefonts/vt323/main/fonts/ttf/VT323-Regular.ttf"
+                font_response = requests.get(font_url)
+                font_bytes = io.BytesIO(font_response.content)
+                
+                # Os tamanhos foram aumentados porque a VT323 é uma fonte mais compacta
+                font_title = ImageFont.truetype(font_bytes, 22)
+                font_text = ImageFont.truetype(font_bytes, 18)
+                font_small = ImageFont.truetype(font_bytes, 16)
+                font_pesetas = ImageFont.truetype(font_bytes, 28)
             except:
-                font_title = font_text = font_small = ImageFont.load_default()
+                font_title = font_text = font_small = font_pesetas = ImageFont.load_default()
             
             # 4. Criar a camada de painéis translúcidos
             ui_overlay = Image.new('RGBA', bg_base.size, (0, 0, 0, 0))
