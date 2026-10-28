@@ -164,8 +164,8 @@ class handler(BaseHTTPRequestHandler):
                 
                 # Categoria 3
                 draw_category(301, "[ GEAR & TOOLS ]")
-                draw_skill_ecg(319, "BUN & VITE", "FINE", (255, 215, 0))
-                draw_skill_ecg(353, "GIT & ACTIONS", "FINE", (255, 215, 0))
+                draw_skill_ecg(319, "BUN & VITE", "FINE", (50, 205, 50))
+                draw_skill_ecg(353, "GIT & ACTIONS", "FINE", (50, 205, 50))
                 draw_skill_ecg(387, "DOCKER", "DANGER", (220, 20, 60))
                 
                 frames.append(frame.convert("RGB"))
