@@ -7,14 +7,13 @@ import os
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         username = 'SnuflyNoctis'
-        headers = {'User-Agent': 'SaveRoom-Vitals-UI'}
+        headers = {'User-Agent': 'SaveRoom-Categorized-Vitals'}
         
         # 1. Buscar dados no GitHub
         try:
             user_data = requests.get(f'https://api.github.com/users/{username}', headers=headers, timeout=5).json()
             repos = user_data.get('public_repos', 14)
             followers = user_data.get('followers', 3)
-            pesetas = (repos * 1500) + (followers * 5000) + 42500
             
             events = requests.get(f'https://api.github.com/users/{username}/events/public', headers=headers, timeout=5).json()
             last_commit = "NO RECENT LOGS FOUND."
@@ -27,10 +26,10 @@ class handler(BaseHTTPRequestHandler):
                             if len(last_commit) > 28: last_commit = last_commit[:25] + "..."
                             break
         except:
-            repos, followers, pesetas = 14, 3, 88500
+            repos, followers = 14, 3
             last_commit = "COMMS LINK SEVERED."
 
-        # Sistema de Condição Global (Painel Esquerdo)
+        # Sistema de Condição Global
         condition_text = "FINE"
         condition_color = (50, 205, 50) 
         if repos < 10:
@@ -52,10 +51,9 @@ class handler(BaseHTTPRequestHandler):
             try:
                 font_title = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 16)
                 font_text = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 14)
-                font_small = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 11) # Nova fonte pequena para o ECG
-                font_pesetas = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 22)
+                font_small = ImageFont.truetype(os.path.join(assets_dir, 'font.ttf'), 11)
             except:
-                font_title = font_text = font_small = font_pesetas = ImageFont.load_default()
+                font_title = font_text = font_small = ImageFont.load_default()
             
             # 4. Criar a camada de painéis translúcidos
             ui_overlay = Image.new('RGBA', bg_base.size, (0, 0, 0, 0))
@@ -66,14 +64,12 @@ class handler(BaseHTTPRequestHandler):
             
             draw_ui.rectangle([30, 30, 290, 210], fill=panel_color, outline=border_color, width=1)
             draw_ui.rectangle([30, 250, 290, 430], fill=panel_color, outline=border_color, width=1)
-            draw_ui.rectangle([560, 30, 820, 210], fill=panel_color, outline=border_color, width=1)
-            draw_ui.rectangle([560, 250, 820, 430], fill=panel_color, outline=border_color, width=1)
+            draw_ui.rectangle([560, 30, 820, 430], fill=panel_color, outline=border_color, width=1)
             
             bg_with_ui = Image.alpha_composite(bg_base, ui_overlay)
             
             # 5. Gerar as Frames da Animação (GIF)
             frames = []
-            
             text_color = (220, 220, 220)
             title_color = (184, 156, 114) 
             
@@ -110,60 +106,61 @@ class handler(BaseHTTPRequestHandler):
                     cursor_pos = 45 + draw.textlength(last_commit, font=font_text) + 2
                     draw.rectangle([cursor_pos, 337, cursor_pos + 6, 350], fill=(200, 0, 0))
                 
-                # --- PAINEL 3: SKILLS CONDITION (NOVO SISTEMA VITALS) ---
+                # --- PAINEL 3: SKILLS CONDITION (CATEGORIZADO) ---
                 draw.text((575, 45), "SKILLS CONDITION", fill=title_color, font=font_title)
                 draw.line([(575, 65), (805, 65)], fill=border_color, width=1)
                 
-                # Função interna para desenhar o ECG animado
+                # Sub-função para desenhar títulos de categoria
+                def draw_category(y_pos, text):
+                    draw.text((575, y_pos), text, fill=(130, 130, 130), font=font_small)
+                    # Linha separadora sutil
+                    text_w = draw.textlength(text, font=font_small)
+                    draw.line([(575 + text_w + 5, y_pos + 6), (805, y_pos + 6)], fill=(50, 50, 50), width=1)
+
+                # Sub-função para desenhar o ECG
                 def draw_skill_ecg(y_pos, skill_name, level, color):
                     draw.text((575, y_pos + 5), f"► {skill_name}", fill=text_color, font=font_text)
                     
-                    # Coordenadas e fundo da caixa do ECG
                     box_x, box_y, box_w, box_h = 680, y_pos, 120, 26
                     draw.rectangle([box_x, box_y, box_x + box_w, box_y + box_h], fill=(10, 15, 10), outline=(50, 50, 50), width=1)
                     
-                    # Linhas de varredura (Scanlines)
                     for sy in range(box_y + 2, box_y + box_h, 4):
                         draw.line([(box_x, sy), (box_x + box_w, sy)], fill=(20, 30, 20), width=1)
                         
-                    # Linha do Batimento Cardíaco Animada
                     base_y = box_y + (box_h // 2)
-                    # O "i" (frame atual) desloca o batimento para a direita criando a animação
                     spike = box_x + 20 + (i * 26) 
                     
                     points = [
-                        (box_x, base_y),
-                        (spike - 10, base_y),
-                        (spike - 5, base_y - 8),
-                        (spike, base_y + 10),
-                        (spike + 5, base_y - 5),
-                        (spike + 10, base_y),
+                        (box_x, base_y), (spike - 10, base_y), (spike - 5, base_y - 8),
+                        (spike, base_y + 10), (spike + 5, base_y - 5), (spike + 10, base_y),
                         (box_x + box_w, base_y)
                     ]
-                    # Cortar as pontas para não desenhar fora da caixa
                     clipped = [(min(max(px, box_x), box_x + box_w), py) for px, py in points]
                     draw.line(clipped, fill=color, width=1)
                     
-                    # Texto da condição (Fine, Caution, Danger) dentro da caixa
                     text_w = draw.textlength(level, font=font_small)
                     draw.text((box_x + box_w - text_w - 4, box_y + 11), level, fill=color, font=font_small)
 
-                # Renderizar as 3 habilidades com os seus níveis
-                draw_skill_ecg(80, "REACT.JS", "FINE", (50, 205, 50))       # Muito Experiente
-                draw_skill_ecg(120, "THREE.JS", "CAUTION", (255, 215, 0))   # Mediano / Intermédio
-                draw_skill_ecg(160, "DOCKER", "DANGER", (220, 20, 60))      # Aprendendo agora
+                # ==========================================
+                # RENDERIZAÇÃO DAS CATEGORIAS E HABILIDADES
+                # ==========================================
                 
-                # --- PAINEL 4: FUNDS ---
-                draw.text((575, 265), "FUNDS", fill=title_color, font=font_title)
-                draw.line([(575, 285), (805, 285)], fill=border_color, width=1)
+                # Categoria 1
+                draw_category(75, "[ UI & FRAMEWORKS ]")
+                draw_skill_ecg(93, "REACT.JS", "FINE", (50, 205, 50))
+                draw_skill_ecg(127, "TAILWIND CSS", "FINE", (50, 205, 50))
+                draw_skill_ecg(161, "THREE.JS", "CAUTION", (255, 215, 0))
                 
-                ptas_text = f"₧ {pesetas:,}".replace(",", ".")
-                ptas_width = draw.textlength(ptas_text, font=font_pesetas)
-                draw.text((690 - (ptas_width/2), 325), ptas_text, fill=(212, 175, 55), font=font_pesetas)
+                # Categoria 2
+                draw_category(205, "[ CORE LANGUAGES ]")
+                draw_skill_ecg(223, "TYPESCRIPT", "FINE", (50, 205, 50))
+                draw_skill_ecg(257, "JAVASCRIPT", "FINE", (50, 205, 50))
                 
-                quote = '"What\'re ya buyin\'?"'
-                quote_width = draw.textlength(quote, font=font_text)
-                draw.text((690 - (quote_width/2), 370), quote, fill=(140, 140, 140), font=font_text)
+                # Categoria 3
+                draw_category(301, "[ GEAR & TOOLS ]")
+                draw_skill_ecg(319, "BUN & VITE", "CAUTION", (255, 215, 0))
+                draw_skill_ecg(353, "GIT & ACTIONS", "CAUTION", (255, 215, 0))
+                draw_skill_ecg(387, "DOCKER", "DANGER", (220, 20, 60))
                 
                 frames.append(frame.convert("RGB"))
             
